@@ -18,10 +18,6 @@ interface SearchBarProps {
 }
 
 class searchBar extends Component<SearchBarState & SearchBarProps> {
-  constructor(props: SearchBarProps) {
-    super(props);
-  }
-
   state: SearchBarState = {
     text: '',
   };

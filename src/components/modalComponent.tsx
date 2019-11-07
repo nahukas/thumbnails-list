@@ -27,10 +27,6 @@ interface Style {
 }
 
 class ModalComponent extends React.Component<ModalProps> {
-  constructor(props: ModalProps) {
-    super(props);
-  }
-
   handleClose = () => {
     return this.props.onClose();
   };

@@ -62,7 +62,12 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
 
   render() {
     const {isLoading, thumbnails, isFilter, filteredThumbnails} = this.state;
-    //const {thumbnails} = this.props;
+    const {thumbnailsData} = this.props;
+
+    console.log('*******');
+    console.log(thumbnailsData);
+    console.log('*******');
+
     return (
       <View style={styles.container}>
         {isLoading ? (
@@ -76,6 +81,9 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
             />
             <ThumbnailsList
               thumbnails={isFilter ? filteredThumbnails : thumbnails}
+              setModalVisible={false}
+              activeThumbnailId={1}
+              activeThumbnailTitle={''}
             />
           </>
         )}

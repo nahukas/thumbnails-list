@@ -33,11 +33,6 @@ interface Style {
 class ThumbnailsList extends React.Component<
   ThumbnailsListProps & ThumbnailsListState
 > {
-  constructor(props: ThumbnailsListProps) {
-    super(props);
-    this.handlePressThumbnail = this.handlePressThumbnail.bind(this);
-  }
-
   state: ThumbnailsListState = {
     setModalVisible: false,
     activeThumbnailId: null,
@@ -57,10 +52,11 @@ class ThumbnailsList extends React.Component<
   };
 
   render() {
+    const {thumbnails} = this.props;
     return (
       <SafeAreaView>
         <ScrollView>
-          {this.props.thumbnails
+          {thumbnails
             .filter(thumbnail => thumbnail.id < 20)
             .map(thumbnail => (
               <TouchableOpacity
