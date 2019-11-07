@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ViewStyle,
-  Text,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, ViewStyle, View, ActivityIndicator} from 'react-native';
+import ThumbnailsList from '../../components/thumbnailsList';
+import {Header} from 'react-navigation-stack';
 
 export interface Ithumbnail {
   albumId: string;
@@ -17,12 +13,11 @@ export interface Ithumbnail {
 
 interface Style {
   container: ViewStyle;
-  title: ViewStyle;
 }
 
 interface HomeScreenState {
   isLoading: boolean;
-  thumbnails: any[];
+  thumbnails: Ithumbnail[];
 }
 
 interface HomeScreenProps {}
@@ -53,11 +48,7 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
         {isLoading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          <View>
-            {thumbnails.map(thumbnail => (
-              <Text key={thumbnail.id}>{thumbnail.title}</Text>
-            ))}
-          </View>
+          <ThumbnailsList thumbails={thumbnails} />
         )}
       </View>
     );
@@ -70,11 +61,8 @@ const styles = StyleSheet.create<Style>({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  title: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+    marginHorizontal: 10,
+    marginTop: Header.HEIGHT * 0.2,
   },
 });
 
