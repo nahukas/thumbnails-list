@@ -14,6 +14,8 @@ interface Style {
 interface HomeScreenState {
   isLoading: boolean;
   thumbnails: Ithumbnail[];
+  filteredThumbnails: Ithumbnail[];
+  isFilter: boolean;
 }
 
 interface HomeScreenProps {
@@ -26,13 +28,29 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
     super(props);
     this.state = {
       thumbnails: [],
+      filteredThumbnails: [],
       isLoading: true,
+      isFilter: false,
     };
+    this.filterSearch = this.filterSearch.bind(this);
   }
 
   componentDidMount() {
     this.fetchThumbnails();
   }
+
+  filterSearch = (word: string) => {
+    if (word === '') {
+      this.setState({isFilter: false});
+    } else {
+      this.setState({isFilter: true});
+    }
+    const {thumbnails} = this.state;
+    const filteredData = thumbnails.filter(thumbnail =>
+      thumbnail.title.toUpperCase().includes(word.toUpperCase()),
+    );
+    this.setState({filteredThumbnails: filteredData});
+  };
 
   private fetchThumbnails = async () => {
     const {setThumbnails} = this.props;
@@ -43,7 +61,7 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
   };
 
   render() {
-    const {isLoading, thumbnails} = this.state;
+    const {isLoading, thumbnails, isFilter, filteredThumbnails} = this.state;
     //const {thumbnails} = this.props;
     return (
       <View style={styles.container}>
@@ -51,8 +69,14 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <>
-            <SearchBar thumbnails={thumbnails} text={''} />
-            <ThumbnailsList thumbnails={thumbnails} />
+            <SearchBar
+              thumbnails={thumbnails}
+              text={''}
+              filterSearch={this.filterSearch}
+            />
+            <ThumbnailsList
+              thumbnails={isFilter ? filteredThumbnails : thumbnails}
+            />
           </>
         )}
       </View>

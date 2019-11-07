@@ -14,6 +14,7 @@ interface SearchBarState {
 
 interface SearchBarProps {
   thumbnails: Ithumbnail[];
+  filterSearch: (word: string) => void;
 }
 
 class searchBar extends Component<SearchBarState & SearchBarProps> {
@@ -25,21 +26,12 @@ class searchBar extends Component<SearchBarState & SearchBarProps> {
     text: '',
   };
 
-  filterSearch = (text: string) => {
-    this.setState({text: text});
-    const {thumbnails} = this.props;
-    const filteredData = thumbnails.filter(thumbnail =>
-      thumbnail.title.toUpperCase().includes(text.toUpperCase()),
-    );
-  };
-
   render() {
     return (
       <View>
         <TextInput
           style={styles.textInput}
-          onChangeText={text => this.filterSearch(text)}
-          value={this.state.text}
+          onChangeText={text => this.props.filterSearch(text)}
         />
       </View>
     );
