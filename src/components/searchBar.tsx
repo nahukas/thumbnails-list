@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {ViewStyle, StyleSheet, View, TextInput, Dimensions} from 'react-native';
 const screenWidth = Math.round(Dimensions.get('window').width);
+import {connect} from 'react-redux';
+import {Ithumbnail} from '../config/models';
 
 interface Style {
   textInput: ViewStyle;
@@ -10,13 +12,25 @@ interface SearchBarState {
   text: string;
 }
 
-class searchBar extends Component<SearchBarState> {
+interface SearchBarProps {
+  thumbnails: Ithumbnail[];
+}
+
+class searchBar extends Component<SearchBarState & SearchBarProps> {
+  constructor(props: SearchBarProps) {
+    super(props);
+  }
+
   state: SearchBarState = {
     text: '',
   };
 
   filterSearch = (text: string) => {
     this.setState({text: text});
+    const {thumbnails} = this.props;
+    const filteredData = thumbnails.filter(thumbnail =>
+      thumbnail.title.toUpperCase().includes(text.toUpperCase()),
+    );
   };
 
   render() {
@@ -45,4 +59,11 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-export default searchBar;
+const mapStateToProps = ({thumbnailsData}) => ({
+  thumbnailsData: thumbnailsData,
+});
+
+export default connect(
+  mapStateToProps,
+  null,
+)(searchBar);

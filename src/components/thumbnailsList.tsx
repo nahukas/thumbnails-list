@@ -15,7 +15,7 @@ import {Ithumbnail} from '../config/models';
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 interface ThumbnailsListProps {
-  thumbails: Ithumbnail[];
+  thumbnails: Ithumbnail[];
 }
 
 interface ThumbnailsListState {
@@ -60,7 +60,7 @@ class ThumbnailsList extends React.Component<
     return (
       <SafeAreaView>
         <ScrollView>
-          {this.props.thumbails
+          {this.props.thumbnails
             .filter(thumbnail => thumbnail.id < 20)
             .map(thumbnail => (
               <TouchableOpacity
