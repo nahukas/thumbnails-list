@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, ViewStyle, View, ActivityIndicator} from 'react-native';
 import ThumbnailsList from '../../components/thumbnailsList';
+import SearchBar from '../../components/searchBar';
 import {Header} from 'react-navigation-stack';
 import {Ithumbnail} from '../../config/models';
 
@@ -41,7 +42,10 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
         {isLoading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          <ThumbnailsList thumbails={thumbnails} />
+          <>
+            <SearchBar text={''} />
+            <ThumbnailsList thumbails={thumbnails} />
+          </>
         )}
       </View>
     );
@@ -53,7 +57,6 @@ const styles = StyleSheet.create<Style>({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
     marginHorizontal: 10,
     marginTop: Header.HEIGHT * 0.2,
   },
