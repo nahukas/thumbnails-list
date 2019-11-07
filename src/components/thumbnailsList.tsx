@@ -1,4 +1,4 @@
-import React, {SFC} from 'react';
+import React from 'react';
 import {
   ViewStyle,
   StyleSheet,
@@ -9,19 +9,19 @@ import {
 } from 'react-native';
 import {Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import ModalComponent from './modalComponent';
+import {Ithumbnail} from '../config/models';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 
-export interface Ithumbnail {
-  albumId: string;
-  id: number;
-  title: string;
-  url: string;
-  thumbnailUrl: string;
-}
-
 interface ThumbnailsListProps {
   thumbails: Ithumbnail[];
+}
+
+interface ThumbnailsListState {
+  setModalVisible: boolean;
+  activeThumbnailId: number;
+  activeThumbnailTitle: string;
 }
 
 interface Style {
@@ -30,27 +30,65 @@ interface Style {
   cardText: ViewStyle;
 }
 
-const ThumbnailsList: React.SFC<ThumbnailsListProps> = props => {
-  return (
-    <SafeAreaView>
-      <ScrollView>
-        {props.thumbails
-          .filter(thumbnail => thumbnail.id < 20)
-          .map(thumbnail => (
-            <TouchableOpacity key={thumbnail.id} style={styles.card}>
-              <Image
-                style={{width: '100%', height: 150, resizeMode: 'cover'}}
-                source={{
-                  uri: `https://picsum.photos/id/${thumbnail.id}/200/300/`,
-                }}
-              />
-              <Text style={styles.cardText}>{thumbnail.title}</Text>
-            </TouchableOpacity>
-          ))}
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+class ThumbnailsList extends React.Component<
+  ThumbnailsListProps & ThumbnailsListState
+> {
+  constructor(props: ThumbnailsListProps) {
+    super(props);
+    this.handlePressThumbnail = this.handlePressThumbnail.bind(this);
+  }
+
+  state: ThumbnailsListState = {
+    setModalVisible: false,
+    activeThumbnailId: null,
+    activeThumbnailTitle: '',
+  };
+
+  handlePressThumbnail = (id: number, titel: string) => {
+    this.setState({
+      setModalVisible: true,
+      activeThumbnailId: id,
+      activeThumbnailTitle: titel,
+    });
+  };
+
+  handleModalClose = () => {
+    this.setState({setModalVisible: false});
+  };
+
+  render() {
+    return (
+      <SafeAreaView>
+        <ScrollView>
+          {this.props.thumbails
+            .filter(thumbnail => thumbnail.id < 20)
+            .map(thumbnail => (
+              <TouchableOpacity
+                key={thumbnail.id}
+                style={styles.card}
+                onPress={() =>
+                  this.handlePressThumbnail(thumbnail.id, thumbnail.title)
+                }>
+                <Image
+                  style={{width: '100%', height: 150, resizeMode: 'cover'}}
+                  source={{
+                    uri: `https://picsum.photos/id/${thumbnail.id}/200/300/`,
+                  }}
+                />
+                <Text style={styles.cardText}>{thumbnail.title}</Text>
+              </TouchableOpacity>
+            ))}
+        </ScrollView>
+        <ModalComponent
+          showModal={this.state.setModalVisible}
+          onClose={this.handleModalClose}
+          id={this.state.activeThumbnailId}
+          title={this.state.activeThumbnailTitle}
+        />
+      </SafeAreaView>
+    );
+  }
+}
 
 export default ThumbnailsList;
 

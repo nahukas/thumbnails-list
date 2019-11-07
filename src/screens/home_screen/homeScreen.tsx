@@ -2,14 +2,7 @@ import React from 'react';
 import {StyleSheet, ViewStyle, View, ActivityIndicator} from 'react-native';
 import ThumbnailsList from '../../components/thumbnailsList';
 import {Header} from 'react-navigation-stack';
-
-export interface Ithumbnail {
-  albumId: string;
-  id: number;
-  title: string;
-  url: string;
-  thumbnailUrl: string;
-}
+import {Ithumbnail} from '../../config/models';
 
 interface Style {
   container: ViewStyle;
