@@ -26,14 +26,15 @@ interface HomeScreenProps {
 class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
   constructor(props: HomeScreenProps) {
     super(props);
-    this.state = {
-      thumbnails: [],
-      filteredThumbnails: [],
-      isLoading: true,
-      isFilter: false,
-    };
     this.filterSearch = this.filterSearch.bind(this);
   }
+
+  state: HomeScreenState = {
+    thumbnails: [],
+    filteredThumbnails: [],
+    isLoading: true,
+    isFilter: false,
+  };
 
   componentDidMount() {
     this.fetchThumbnails();
