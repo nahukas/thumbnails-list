@@ -31,7 +31,8 @@ interface Style {
 }
 
 class ThumbnailsList extends React.Component<
-  ThumbnailsListProps & ThumbnailsListState
+  ThumbnailsListProps,
+  ThumbnailsListState
 > {
   state: ThumbnailsListState = {
     setModalVisible: false,

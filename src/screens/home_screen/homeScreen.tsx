@@ -19,7 +19,7 @@ interface HomeScreenState {
 }
 
 interface HomeScreenProps {
-  setThumbnails: (thumbnail) => void;
+  setThumbnails: (thumbnails: Ithumbnail[]) => void;
   thumbnailsData: Ithumbnail[];
 }
 
@@ -75,16 +75,9 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <>
-            <SearchBar
-              thumbnails={thumbnails}
-              text={''}
-              filterSearch={this.filterSearch}
-            />
+            <SearchBar filterSearch={this.filterSearch} />
             <ThumbnailsList
               thumbnails={isFilter ? filteredThumbnails : thumbnails}
-              setModalVisible={false}
-              activeThumbnailId={1}
-              activeThumbnailTitle={''}
             />
           </>
         )}

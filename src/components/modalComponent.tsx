@@ -19,6 +19,8 @@ interface ModalProps {
   title: string;
 }
 
+interface ModalState {}
+
 interface Style {
   container: ViewStyle;
   closeButton: ViewStyle;
@@ -26,7 +28,7 @@ interface Style {
   title: ViewStyle;
 }
 
-class ModalComponent extends React.Component<ModalProps> {
+class ModalComponent extends React.Component<ModalProps, ModalState> {
   handleClose = () => {
     return this.props.onClose();
   };
