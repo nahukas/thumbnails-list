@@ -31,7 +31,8 @@ interface Style {
 }
 
 class ThumbnailsList extends React.Component<
-  ThumbnailsListProps & ThumbnailsListState
+  ThumbnailsListProps,
+  ThumbnailsListState
 > {
   state: ThumbnailsListState = {
     setModalVisible: false,
@@ -86,8 +87,6 @@ class ThumbnailsList extends React.Component<
   }
 }
 
-export default ThumbnailsList;
-
 const styles = StyleSheet.create<Style>({
   card: {
     backgroundColor: '#fff',
@@ -110,3 +109,5 @@ const styles = StyleSheet.create<Style>({
     fontSize: 16,
   },
 });
+
+export default ThumbnailsList;

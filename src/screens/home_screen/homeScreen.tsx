@@ -13,13 +13,12 @@ interface Style {
 
 interface HomeScreenState {
   isLoading: boolean;
-  thumbnails: Ithumbnail[];
   filteredThumbnails: Ithumbnail[];
   isFilter: boolean;
 }
 
 interface HomeScreenProps {
-  setThumbnails: (thumbnail) => void;
+  setThumbnails: (thumbnailsData) => void;
   thumbnailsData: Ithumbnail[];
 }
 
@@ -30,9 +29,8 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
   }
 
   state: HomeScreenState = {
-    thumbnails: [],
     filteredThumbnails: [],
-    isLoading: true,
+    isLoading: false,
     isFilter: false,
   };
 
@@ -41,33 +39,32 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
   }
 
   filterSearch = (word: string) => {
+    const {thumbnailsData} = this.props;
     if (word === '') {
       this.setState({isFilter: false});
     } else {
       this.setState({isFilter: true});
+      const filteredData = thumbnailsData.filter(thumbnail =>
+        thumbnail.title.toUpperCase().includes(word.toUpperCase()),
+      );
+      this.setState({filteredThumbnails: filteredData});
     }
-    const {thumbnails} = this.state;
-    const filteredData = thumbnails.filter(thumbnail =>
-      thumbnail.title.toUpperCase().includes(word.toUpperCase()),
-    );
-    this.setState({filteredThumbnails: filteredData});
   };
 
   private fetchThumbnails = async () => {
     const {setThumbnails} = this.props;
-    fetch('https://jsonplaceholder.typicode.com/photos')
-      .then(response => response.json())
-      .then(json => this.setState({thumbnails: json, isLoading: false}))
-      .then(json => setThumbnails(json));
+    this.setState({isLoading: true});
+
+    let response = await fetch(`https://jsonplaceholder.typicode.com/photos`);
+    let responseJson = await response.json();
+    setThumbnails(responseJson);
+
+    this.setState({isLoading: false});
   };
 
   render() {
-    const {isLoading, thumbnails, isFilter, filteredThumbnails} = this.state;
+    const {isLoading, isFilter, filteredThumbnails} = this.state;
     const {thumbnailsData} = this.props;
-
-    console.log('*******');
-    console.log(thumbnailsData);
-    console.log('*******');
 
     return (
       <View style={styles.container}>
@@ -75,16 +72,9 @@ class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <>
-            <SearchBar
-              thumbnails={thumbnails}
-              text={''}
-              filterSearch={this.filterSearch}
-            />
+            <SearchBar filterSearch={this.filterSearch} />
             <ThumbnailsList
-              thumbnails={isFilter ? filteredThumbnails : thumbnails}
-              setModalVisible={false}
-              activeThumbnailId={1}
-              activeThumbnailTitle={''}
+              thumbnails={isFilter ? filteredThumbnails : thumbnailsData}
             />
           </>
         )}
@@ -103,8 +93,8 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const mapStateToProps = ({thumbnailsData}) => ({
-  thumbnailsData: thumbnailsData,
+const mapStateToProps = ({thumbnail}) => ({
+  thumbnailsData: thumbnail.thumbnailsData,
 });
 
 const mapDispatchToProps = dispatch => ({
